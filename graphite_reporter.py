@@ -6,8 +6,8 @@ Copyright 2012 SmartReceipt; All Rights Reserved.
 
 __author__ = 'Matt Schartman, mschartman@gmail.com'
 
-from socket import socket, AF_INET, SOCK_DGRAM, SOCK_STREAM
-from socket import error as socket_error
+import socket
+from socket import AF_INET, SOCK_DGRAM, SOCK_STREAM, error as socket_error
 from time import time
 from logging import getLogger
 
@@ -45,7 +45,7 @@ class GraphiteReporter(object):
     def reporting_host(self):
         """Get the reporting host."""
         if self._reporting_host is None:
-            hostname = self.socket.gethostname()
+            hostname = socket.gethostname()
             if hostname.count('.'):
                 hostname = hostname[:hostname.index('.')]
             self._reporting_host = hostname
@@ -57,13 +57,13 @@ class GraphiteReporter(object):
         l = getLogger('GraphiteReporter.socket')
         if self._socket is None:
             if self.protocol is 'tcp':
-                self._socket = socket(AF_INET, SOCK_STREAM)
+                self._socket = socket.socket(AF_INET, SOCK_STREAM)
             elif self.protocol is 'udp':
-                self._socket = socket(AF_INET, SOCK_DGRAM)
+                self._socket = socket.socket(AF_INET, SOCK_DGRAM)
             else:
                 l.error('Unrecognized GRAPHITE_PROTOCOL: %s, '
                         'defaulting to TCP', self.protocol)
-                self._socket = socket(AF_INET, SOCK_STREAM)
+                self._socket = socket.socket(AF_INET, SOCK_STREAM)
             try:
                 self._socket.connect((self.host, self.port))
             except socket_error, e:
