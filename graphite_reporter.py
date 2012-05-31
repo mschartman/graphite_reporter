@@ -37,7 +37,7 @@ class GraphiteReporter(object):
         self._reporting_host = reporting_host
         self._socket = None
         self.host = graphite_host
-        self.port = graphite_port
+        self.port = int(graphite_port)
         self.protocol = graphite_protocol
         self.accumulated_count = 0
 
